@@ -1,6 +1,21 @@
-# stdatalog_dtk
+---
+pagetitle: Release Notes for stdatalog_dtk 
+lang: en
+header-includes: <link rel="icon" type="image/x-icon" href="_htmresc/favicon.png" />
+---
 
-![latest tag](https://img.shields.io/github/v/tag/STMicroelectronics/stdatalog_dtk.svg?color=brightgreen)
+::: {.row}
+::: {.col-sm-12 .col-lg-4}
+
+<center> 
+# Release Notes for <mark>stdatalog_dtk</mark> 
+Copyright &copy; 2025 STMicroelectronics
+    
+[![ST logo](../_htmresc/st_logo_2020.png)](https://www.st.com){.logo}
+</center>
+
+
+# Purpose
 
 The **[stdatalog_dtk](https://github.com/STMicroelectronics/stdatalog_dtk)** (**dtk** acronym stands for **D**ata **T**ool**K**it) provides functionalities to realize a data processing pipeline that can handle data from various sources and process them in many different and customizable ways.
 A data processing pipeline is a series of data processing elements connected in series, where the output of one element is the input of the next. These processing elements are called Plugins. The package provides an abstract Plugin class that must be inherited to create a new plugin that can be added to the pipeline.
@@ -17,50 +32,36 @@ It is designed to simplify the development of applications using data from ST se
 
 The package is part of the **[STDATALOG-PYSDK](https://github.com/STMicroelectronics/stdatalog-pysdk)**, which is a set of libraries and tools that enable the development of applications for data logging and data monitoring.
 
-## Features
+:::
 
-- Manage a data pipeline
-- Create and manage plugins
-- Support for plugins to process data
-- Integration with Qt for GUI applications
+::: {.col-sm-12 .col-lg-8}
+# Update History
 
-## Installation
+::: {.collapse}
+<input type="checkbox" id="collapse-section1" checked aria-hidden="true">
+<label for="collapse-section1" aria-hidden="true">v1.0.0 / 17-Jan-25</label>
+<div>
 
-You can install the `stdatalog_dtk` package using pip:
 
-```sh
-pip install stdatalog_dtk
-```
+## Main Changes
 
-## Installation
+### First official release
 
-You can install the package using pip:
 
-```sh
-pip install stdatalog_pnpl
-```
+</div>
+:::
 
-The package could also be installed as part of the **STDATALOG-PYSDK** by launching the SDK installation script from the SDK root folder:
+:::
+:::
 
-On Windows:
-```sh
-.\STDATALOG-PYSDK_install.bat
-```
-
-On Linux:
-```sh
-./STDATALOG-PYSDK_install.sh
-```
-
-## Requirements
-The package requires the following dependencies:
-
-- **[stdatalog_core](https://github.com/STMicroelectronics/stdatalog_core)**
-- PySide6==6.6.1
-
-## Usage
-Please refer to the guide found **[here](https://github.com/STMicroelectronics/stdatalog-pysdk/tree/main\examples\dtk_plugins\documentation\doc.html)** for a complete and detailed explanation regarding the `stdatalog_dtk` package and the creation and execution of Plugins.
-within the guide you will notice that we provide a set of tutorials with different complexity levels to help you get started with the package and Plugins development.
-
-## License
-This project is licensed under the BSD 3-Clause License - see the LICENSE.md file for details.
+<footer class="sticky">
+::: {.columns}
+::: {.column width="95%"}
+For complete documentation,
+visit: [www.st.com](https://github.com/STMicroelectronics/stdatalog-pysdk)
+:::
+::: {.column width="5%"}
+<abbr title="Based on template cx566953 version 2.0">Info</abbr>
+:::
+:::
+</footer>

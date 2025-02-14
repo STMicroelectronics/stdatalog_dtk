@@ -1,0 +1,13 @@
+LICENSE.md
+MANIFEST.in
+README.md
+pyproject.toml
+setup.py
+stdatalog_dtk/HSD_DataToolkit.py
+stdatalog_dtk/HSD_DataToolkit_Pipeline.py
+stdatalog_dtk/__init__.py
+stdatalog_dtk.egg-info/PKG-INFO
+stdatalog_dtk.egg-info/SOURCES.txt
+stdatalog_dtk.egg-info/dependency_links.txt
+stdatalog_dtk.egg-info/requires.txt
+stdatalog_dtk.egg-info/top_level.txt
