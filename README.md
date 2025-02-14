@@ -59,7 +59,7 @@ The package requires the following dependencies:
 - PySide6==6.6.1
 
 ## Usage
-Please refer to the guide found **[here](https://github.com/STMicroelectronics/stdatalog-pysdk/tree/main\examples\dtk_plugins\documentation\doc.html)** for a complete and detailed explanation regarding the `stdatalog_dtk` package and the creation and execution of Plugins.
+Please refer to the guide found **[here](https://htmlpreview.github.io/?https://raw.githubusercontent.com/STMicroelectronics/stdatalog_examples/refs/heads/main/dtk_plugins/documentation/doc.html)** for a complete and detailed explanation regarding the `stdatalog_dtk` package and the creation and execution of Plugins.
 within the guide you will notice that we provide a set of tutorials with different complexity levels to help you get started with the package and Plugins development.
 
 ## License
