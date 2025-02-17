@@ -26,21 +26,20 @@ The package is part of the **[STDATALOG-PYSDK](https://github.com/STMicroelectro
 
 ## Installation
 
-You can install the `stdatalog_dtk` package using pip:
+To install the `stdatalog_dtk` package after downloading it, execute the following command from the package's root directory:
+NOTE: Be sure to satisfy the requirements before installing the package ([see Requirements](#requirements)).
 
+On Windows:
 ```sh
-pip install stdatalog_dtk
+python -m pip install dist\stdatalog_dtk-1.0.0-py3-none-any.whl
 ```
 
-## Installation
-
-You can install the package using pip:
-
+On Linux:
 ```sh
-pip install stdatalog_pnpl
+python3 -m pip install dist/stdatalog_dtk-1.0.0-py3-none-any.whl
 ```
 
-The package could also be installed as part of the **STDATALOG-PYSDK** by launching the SDK installation script from the SDK root folder:
+The package could also be installed as part of the **[STDATALOG-PYSDK](https://github.com/STMicroelectronics/stdatalog-pysdk)** by launching the SDK installation script from the SDK root folder:
 
 On Windows:
 ```sh
@@ -51,6 +50,8 @@ On Linux:
 ```sh
 ./STDATALOG-PYSDK_install.sh
 ```
+
+Source code is also available within the inner `stdatalog_dtk` folder.
 
 ## Requirements
 The package requires the following dependencies:
