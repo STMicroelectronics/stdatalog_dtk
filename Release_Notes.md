@@ -38,7 +38,23 @@ The package is part of the **[STDATALOG-PYSDK](https://github.com/STMicroelectro
 # Update History
 
 ::: {.collapse}
-<input type="checkbox" id="collapse-section1" checked aria-hidden="true">
+<input type="checkbox" id="collapse-section2" checked aria-hidden="true">
+<label for="collapse-section2" aria-hidden="true">v1.1.0 / 9-Apr-25</label>
+<div>
+
+
+## Main Changes
+
+### Maintenance Release
+
+- **Added macos support.**
+- Use the latest PySide6 version compatible w.r.t. architecture (Windows, Linux, macOS; 32bit, 64bit)
+
+</div>
+:::
+
+::: {.collapse}
+<input type="checkbox" id="collapse-section1"  aria-hidden="true">
 <label for="collapse-section1" aria-hidden="true">v1.0.0 / 17-Jan-25</label>
 <div>
 
