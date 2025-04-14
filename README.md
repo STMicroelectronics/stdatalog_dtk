@@ -58,6 +58,9 @@ The package requires the following dependencies:
 
 - **[stdatalog_core](https://github.com/STMicroelectronics/stdatalog_core)**
 - PySide6
+	- 6.9.0 on Windows, Linux not aarch64 machines and macOS arm64 machines
+	- 6.8.0.2 on Linux aarch64 machines
+	- 6.7.3 on macOS x86_64 machines
 
 ## Usage
 Please refer to the guide found **[here](https://htmlpreview.github.io/?https://raw.githubusercontent.com/STMicroelectronics/stdatalog_examples/refs/heads/main/dtk_plugins/documentation/doc.html)** for a complete and detailed explanation regarding the `stdatalog_dtk` package and the creation and execution of Plugins.
