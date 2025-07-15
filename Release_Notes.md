@@ -38,7 +38,22 @@ The package is part of the **[STDATALOG-PYSDK](https://github.com/STMicroelectro
 # Update History
 
 ::: {.collapse}
-<input type="checkbox" id="collapse-section2" checked aria-hidden="true">
+<input type="checkbox" id="collapse-section3" checked aria-hidden="true">
+<label for="collapse-section3" aria-hidden="true">v1.2.0 / 20-Jun-25</label>
+<div>
+
+
+## Main Changes
+
+### Maintenance Release
+
+- Added support to Python 3.13
+
+</div>
+:::
+
+::: {.collapse}
+<input type="checkbox" id="collapse-section2" aria-hidden="true">
 <label for="collapse-section2" aria-hidden="true">v1.1.0 / 9-Apr-25</label>
 <div>
 
