@@ -21,7 +21,7 @@ with open("LICENSE.md", "r") as fh:
 
 setuptools.setup(
     name="stdatalog_dtk",
-    version="1.2.0",
+    version="1.2.1",
     author="SRA-ASP",
     author_email="matteo.ronchi@st.com",
     description="STMicroelectronics DataToolkit python package", 
@@ -44,7 +44,7 @@ setuptools.setup(
         "Topic :: Software Development :: Embedded Systems"
     ],
     install_requires=[
-        "stdatalog_core==1.2.0",
+        "stdatalog_core==1.2.1",
         "PySide6==6.9.0; platform_system == 'Windows'",
         "PySide6==6.9.0; platform_system == 'Linux' and platform_machine != 'aarch64'",
         "PySide6==6.8.0.2; platform_system == 'Linux' and platform_machine == 'aarch64'",

@@ -11,7 +11,7 @@ header-includes: <link rel="icon" type="image/x-icon" href="_htmresc/favicon.png
 # Release Notes for <mark>stdatalog_dtk</mark> 
 Copyright &copy; 2025 STMicroelectronics
     
-[![ST logo](../_htmresc/st_logo_2020.png)](https://www.st.com){.logo}
+[![ST logo](_htmresc/st_logo_2020.png)](https://www.st.com){.logo}
 </center>
 
 
