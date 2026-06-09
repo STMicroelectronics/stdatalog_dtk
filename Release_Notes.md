@@ -39,7 +39,25 @@ The package is part of the **[STDATALOG-PYSDK](https://github.com/STMicroelectro
 # Update History
 
 ::: {.collapse}
-<input type="checkbox" id="collapse-section4" checked aria-hidden="true">
+<input type="checkbox" id="collapse-section5" checked aria-hidden="true">
+<label for="collapse-section5" aria-hidden="true">v1.4.0 / 15-May-26</label>
+<div>
+
+
+## Main Changes
+
+### Maintenance Release
+
+- Enhanced documentation for HSD Data Toolkit and Pipeline modules
+  - Added module-level docstrings to HSD_DataToolkit.py and HSD_DataToolkit_Pipeline.py
+  - Improved method docstrings for clarity and completeness across various classes
+  - Clarified parameters and return types in the plugin framework
+
+</div>
+:::
+
+::: {.collapse}
+<input type="checkbox" id="collapse-section4" aria-hidden="true">
 <label for="collapse-section4" aria-hidden="true">v1.3.0 / 14-Nov-25</label>
 <div>
 
