@@ -31,12 +31,12 @@ NOTE: Be sure to satisfy the requirements before installing the package ([see Re
 
 On Windows:
 ```sh
-python -m pip install dist\stdatalog_dtk-1.4.0-py3-none-any.whl
+python -m pip install dist\stdatalog_dtk-1.5.0-py3-none-any.whl
 ```
 
 On Linux/macOS:
 ```sh
-python3 -m pip install dist/stdatalog_dtk-1.4.0-py3-none-any.whl
+python3 -m pip install dist/stdatalog_dtk-1.5.0-py3-none-any.whl
 ```
 
 The package could also be installed as part of the **[STDATALOG-PYSDK](https://github.com/STMicroelectronics/stdatalog-pysdk)** by launching the SDK installation script from the SDK root folder:
@@ -57,11 +57,7 @@ Source code is also available within the inner `stdatalog_dtk` folder.
 The package requires the following dependencies:
 
 - **[stdatalog_core](https://github.com/STMicroelectronics/stdatalog_core)**
-- PySide6
-	- 6.10.0 on Windows, Linux not aarch64 machines
-	- 6.9.0 on macOS arm64 machines
-	- 6.8.0.2 on Linux aarch64 machines
-	- 6.7.3 on macOS x86_64 machines
+- PySide6==6.11.2
 
 ## Usage
 Please refer to the guide found **[here](https://htmlpreview.github.io/?https://raw.githubusercontent.com/STMicroelectronics/stdatalog_examples/refs/heads/main/dtk_plugins/documentation/doc.html)** for a complete and detailed explanation regarding the `stdatalog_dtk` package and the creation and execution of Plugins.

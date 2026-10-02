@@ -39,7 +39,27 @@ The package is part of the **[STDATALOG-PYSDK](https://github.com/STMicroelectro
 # Update History
 
 ::: {.collapse}
-<input type="checkbox" id="collapse-section5" checked aria-hidden="true">
+<input type="checkbox" id="collapse-section6" checked aria-hidden="true">
+<label for="collapse-section6" aria-hidden="true">v1.5.0 / 18-Sep-26</label>
+<div>
+
+
+## Main Changes
+
+### Maintenance Release
+
+- Added "send command" capability: enabled sending messages to the STM32 target via the plugin
+- Fixed indentation bug: call data processing only when a complete packet is available
+- Registered the app-level controller for plugin PlotWidget commands and parameters such as "plot time window"
+- Added support to Python 3.14
+- Updated requirements with more recent versions of packages dependencies
+
+
+</div>
+:::
+
+::: {.collapse}
+<input type="checkbox" id="collapse-section5" aria-hidden="true">
 <label for="collapse-section5" aria-hidden="true">v1.4.0 / 15-May-26</label>
 <div>
 

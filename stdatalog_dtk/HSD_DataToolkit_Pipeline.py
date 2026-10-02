@@ -29,7 +29,86 @@ import os
 import sys
 import re
 import importlib
+from typing import Callable, Optional
+from threading import Lock, Thread
+from itertools import count
 from abc import ABC, abstractmethod
+
+
+class PluginCommandContext:
+    """Command gateway exposed to each plugin.
+
+    The context keeps plugin metadata and routes commands through the provided
+    command sender callables,
+    optionally on a background thread for non-blocking UI/plugin flows.
+    """
+
+    def __init__(
+        self,
+        plugin_id,
+        plugin_name,
+        send_plugin_command: Optional[Callable] = None,
+        send_command: Optional[Callable] = None,
+    ):
+        self.plugin_id = plugin_id
+        self.plugin_name = plugin_name
+        self._send_plugin_command = send_plugin_command
+        self._send_command = send_command
+        self._request_counter = count(1)
+        self._counter_lock = Lock()
+
+    def _next_request_id(self):
+        with self._counter_lock:
+            return f"{self.plugin_id}:{next(self._request_counter)}"
+
+    def send_command(self, json_command):
+        """Send a command synchronously through the configured sender.
+
+        Returns a tuple ``(request_id, response)``.
+        """
+        request_id = self._next_request_id()
+        response = None
+
+        if self._send_plugin_command is not None:
+            response = self._send_plugin_command(
+                self.plugin_id,
+                self.plugin_name,
+                request_id,
+                json_command,
+            )
+        elif self._send_command is not None:
+            response = self._send_command(json_command)
+
+        return request_id, response
+
+    def send_command_async(self, json_command, callback=None, error_callback=None):
+        """Send a command asynchronously using a lightweight worker thread."""
+
+        request_id = self._next_request_id()
+
+        def _runner():
+            try:
+                if self._send_plugin_command is not None:
+                    response = self._send_plugin_command(
+                        self.plugin_id,
+                        self.plugin_name,
+                        request_id,
+                        json_command,
+                    )
+                elif self._send_command is not None:
+                    response = self._send_command(json_command)
+                else:
+                    response = None
+
+                if callback is not None:
+                    callback(request_id, response)
+            except Exception as exc:
+                if error_callback is not None:
+                    error_callback(request_id, exc)
+
+        worker = Thread(target=_runner, daemon=True)
+        worker.start()
+        return request_id
 
 class HSD_Plugin(ABC):
     """Abstract base class for Data Toolkit plugins.
@@ -46,6 +125,38 @@ class HSD_Plugin(ABC):
 
     def __init__(self):
         self.components_status = {}
+        self.plugin_context = None
+        self.plugin_id = None
+        self.plugin_name = self.__class__.__name__
+
+    def attach_context(self, plugin_context):
+        """Attach a plugin command context provided by the runtime pipeline."""
+        self.plugin_context = plugin_context
+        self.plugin_id = plugin_context.plugin_id
+        self.plugin_name = plugin_context.plugin_name
+
+    def send_command(self, json_command):
+        """Send a command through the plugin context in synchronous mode.
+
+        Returns the controller response or ``None`` if no context is attached.
+        """
+        if self.plugin_context is None:
+            return None
+        _, response = self.plugin_context.send_command(json_command)
+        return response
+
+    def send_command_async(self, json_command, callback=None, error_callback=None):
+        """Send a command asynchronously through the plugin context.
+
+        Returns the generated request id, or ``None`` if context is unavailable.
+        """
+        if self.plugin_context is None:
+            return None
+        return self.plugin_context.send_command_async(
+            json_command,
+            callback=callback,
+            error_callback=error_callback,
+        )
 
     def get_components_status(self):
         """Return the full components status dictionary.
@@ -163,12 +274,29 @@ class HSD_DataToolkit_Pipeline:
         # Clear all existing plugin plot widgets
         self.controller.clear_all_plugin_plot_widgets()
 
+        # Register app-level controller for plugin plot factories.
+        try:
+            from stdatalog_gui.Widgets.Plots.PluginPlotWidget import PluginPlotWidget
+            PluginPlotWidget.set_default_controller(self.controller)
+        except Exception:
+            pass
+
         print("len(self.plugin_modules):", len(self.plugin_modules_names))
 
-        for plugin_name in self.plugin_modules_names:
+        for index, plugin_name in enumerate(self.plugin_modules_names):
             plugin_instance = self.validate_plugin(plugin_name)
             if plugin_instance is None:
                 continue
+
+            plugin_id = f"plugin:{plugin_name}:{index}"
+            plugin_context = PluginCommandContext(
+                plugin_id=plugin_id,
+                plugin_name=plugin_name,
+                send_plugin_command=getattr(self.controller, "send_plugin_command", None),
+                send_command=getattr(self.controller, "send_command", None),
+            )
+            if hasattr(plugin_instance, "attach_context"):
+                plugin_instance.attach_context(plugin_context)
 
             # Call the plugin's graphics method
             widget = plugin_instance.create_plot_widget()
@@ -177,8 +305,7 @@ class HSD_DataToolkit_Pipeline:
 
             # If the plugin returns a widget, add it to the main layout
             if widget is not None:
-                widget.app_qt = self.controller.qt_app
-                widget.controller = self.controller
+                self._bind_plot_widget_controller(widget, self.controller)
                 widget.parent = self.controller.plots_layout
                 self.controller.add_plugin_plot_widget(widget)
 
@@ -187,6 +314,87 @@ class HSD_DataToolkit_Pipeline:
 
     # def remove_plugin(self, plugin):
     #     self.plugins.remove(plugin)
+
+    @staticmethod
+    def _bind_plot_widget_controller(widget, controller):
+        """Bind plugin plot widgets to the shared application controller.
+
+        This reconnects runtime plot signals so plugin plots receive the same
+        logging/detecting/time-window updates as standard plots.
+        """
+        if widget is None or controller is None:
+            return
+
+        def _safe_connect(source, signal_name, slot):
+            signal = getattr(source, signal_name, None)
+            if signal is not None and slot is not None:
+                try:
+                    signal.connect(slot)
+                except (RuntimeError, TypeError):
+                    pass
+
+        def _safe_disconnect(source, signal_name, slot):
+            signal = getattr(source, signal_name, None)
+            if signal is not None and slot is not None:
+                try:
+                    signal.disconnect(slot)
+                except (RuntimeError, TypeError):
+                    pass
+
+        def _bind_one(plot_widget):
+            if plot_widget is None or not hasattr(plot_widget, "controller"):
+                return
+
+            old_controller = getattr(plot_widget, "controller", None)
+            if old_controller is controller:
+                if hasattr(plot_widget, "app_qt"):
+                    plot_widget.app_qt = getattr(controller, "qt_app", None)
+                return
+
+            if old_controller is not None:
+                _safe_disconnect(
+                    old_controller,
+                    "sig_logging",
+                    getattr(plot_widget, "s_is_logging", None),
+                )
+                _safe_disconnect(
+                    old_controller,
+                    "sig_detecting",
+                    getattr(plot_widget, "s_is_detecting", None),
+                )
+                _safe_disconnect(
+                    old_controller,
+                    "sig_plot_window_time_updated",
+                    getattr(plot_widget, "s_time_window_updated", None),
+                )
+
+            plot_widget.controller = controller
+            if hasattr(plot_widget, "app_qt"):
+                plot_widget.app_qt = getattr(controller, "qt_app", None)
+
+            _safe_connect(
+                controller,
+                "sig_logging",
+                getattr(plot_widget, "s_is_logging", None),
+            )
+            _safe_connect(
+                controller,
+                "sig_detecting",
+                getattr(plot_widget, "s_is_detecting", None),
+            )
+            _safe_connect(
+                controller,
+                "sig_plot_window_time_updated",
+                getattr(plot_widget, "s_time_window_updated", None),
+            )
+
+        _bind_one(widget)
+
+        # Support plugin containers exposing multiple internal plot widgets.
+        nested_plots = getattr(widget, "_plots", None)
+        if isinstance(nested_plots, (list, tuple)):
+            for plot_widget in nested_plots:
+                _bind_one(plot_widget)
 
     @staticmethod
     def validate_plugin(plugin_name):

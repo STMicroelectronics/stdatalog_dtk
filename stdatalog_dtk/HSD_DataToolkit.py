@@ -118,12 +118,13 @@ class HSD_DataToolkit(Thread):
                     ]
                 else:
                     timestamp = None
-            data_buffer = np.frombuffer(
-                packet, dtype=TypeConversion.get_np_dtype(data_type)
-            )
-            self.data_pipeline.process_data(
-                HSD_DataToolkit_data(comp_name, data_buffer, timestamp)
-            )
+                    
+                data_buffer = np.frombuffer(
+                    packet, dtype=TypeConversion.get_np_dtype(data_type)
+                )
+                self.data_pipeline.process_data(
+                    HSD_DataToolkit_data(comp_name, data_buffer, timestamp)
+                )
         else:
             # Raw data is passed without any processing (timestamps or packetization).
             # Packetization and timestamping should be handled at a higher level
